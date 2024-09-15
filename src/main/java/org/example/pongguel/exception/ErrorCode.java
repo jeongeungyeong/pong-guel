@@ -16,7 +16,27 @@ public enum ErrorCode {
     // 요청 본문 형식 오류 추가
     INVALID_REQUEST_BODY(HttpStatus.BAD_REQUEST, "요청 본문의 형식이 올바르지 않습니다."),
     ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 엔티티입니다."),
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서비스 이용에 장애가 있습니다.");
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서비스 이용에 장애가 있습니다."),
+
+    // 카카오 회원가입 및 로그인
+    //400
+    KAKAO_ACCESS_TOKEN_BAD_REQUEST(HttpStatus.BAD_REQUEST,"잘못된 카카오 access_token 파라미터 요청입니다."),
+    KAKAO_USER_INFO_BAD_REQUEST(HttpStatus.BAD_REQUEST,"잘못된 카카오 사용자정보 파라미터 요청입니다."),
+    //401
+    KAKAO_ACCESS_TOKEN_UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"인가코드 인증에 실패했습니다."),
+    KAKAO_USER_INFO_UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"카카오 액세스 토큰이 만료되었거나 유효하지 않습니다."),
+    //403
+    KAKAO_ACCESS_TOKEN_FORBIDDEN(HttpStatus.FORBIDDEN,"카카오 로그인이 비활성화됐습니다"),
+    KAKAO_USER_INFO_FORBIDDEN(HttpStatus.FORBIDDEN,"카카오 정보 요청 권한이 없습니다."),
+    //404
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
+    //409
+    PROCESS_USER_CONFLICT(HttpStatus.CONFLICT,"이미 가입한 회원입니다."),
+    //500
+    KAKAO_ACCESS_TOKEN_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"OAuth 서버 일시적 오류가 생겼습니다."),
+    KAKAO_USER_INFO_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"카카오서버 내부의 일시적 오류가 생겼습니다."),
+    PROCESS_USER_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"데이터베이스 오류가 생겼습니다.");
+
 
     //공통
     private final HttpStatus status;
