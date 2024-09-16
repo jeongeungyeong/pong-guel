@@ -3,15 +3,25 @@ package org.example.pongguel.book.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.pongguel.book.domain.Book;
+import org.example.pongguel.book.dto.SaveSelectedBookResponse;
 import org.example.pongguel.book.dto.SearchBookList;
 import org.example.pongguel.book.dto.SearchBookResponse;
+import org.example.pongguel.book.dto.SelectedBook;
 import org.example.pongguel.book.repository.BookRepository;
+import org.example.pongguel.exception.ErrorCode;
+import org.example.pongguel.exception.NotFoundException;
+import org.example.pongguel.exception.UnauthorizedException;
+import org.example.pongguel.jwt.JwtTokenProvider;
+import org.example.pongguel.user.domain.User;
+import org.example.pongguel.user.repository.UserRepository;
+import org.json.JSONObject;
+import org.json.XML;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriUtils;
-import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +39,8 @@ public class BookService {
 
     private final WebClient webClient;
     private final BookRepository bookRepository;
+    private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // 네이버 책 조회하기
     public SearchBookList searchBookList (String query, int display, int start, String sort) {
@@ -67,5 +79,88 @@ public class BookService {
                     return new SearchBookList("책 조회에 성공했습니다!",total,bookList);
                 })
                 .block();
+    }
+
+    // 사용자의 책 선택 및 저장
+    @Transactional
+    public SaveSelectedBookResponse SaveSelectedBook (String token,Long isbn){
+        // 1. 토큰 유효성 검사
+        User user = getUserFromToken(token);
+        // 2. 검색 결과에서 찾은 ISBN으로 책 찾기
+        SelectedBook selectedBook = findBookByIsbn(isbn);
+        // 3.  책 저장 또는 조회 Book 객체 생성
+        Book book = saveOrGetBook(selectedBook,user);
+        // 4. SaveSelectedBookResponse 생성 및 반환
+        return createSaveSelectedBookResponse(book);
+    }
+
+    // ISBN으로 책 조회
+    private SelectedBook findBookByIsbn(Long isbn){
+       return webClient.get()
+               .uri(uriBuilder -> uriBuilder
+                       .scheme("https")
+                       .host(bookBasehUrl)
+                       .path("/book_adv.xml")
+                       .queryParam("d_isbn",isbn)
+                       .build())
+               .header("X-Naver-Client-Id", clientId)
+               .header("X-Naver-Client-Secret", clientSecret)
+               .retrieve()
+               .bodyToMono(String.class)
+               .map(xmlString -> {
+                           JSONObject jsonObject = XML.toJSONObject(xmlString); // xml -> json으로 변환
+                           JSONObject itemObject = jsonObject.getJSONObject("rss").getJSONObject("channel").getJSONObject("item");
+                           return new SelectedBook(
+                                   itemObject.getString("title"),
+                                   itemObject.getString("description"),
+                                   itemObject.getString("image"),
+                                   itemObject.getString("author"),
+                                   itemObject.getString("publisher"),
+                                   itemObject.getLong("isbn")
+                           );
+                       })
+               .block();
+    }
+    // 토큰 유효성 검사 및 유저 정보 조회
+    private User getUserFromToken(String token) {
+        if (!jwtTokenProvider.validateToken(token)) {
+            throw new UnauthorizedException(ErrorCode.JWT_INVALID_TOKEN);
+        }
+        String accountEmail = jwtTokenProvider.getUserEmail(token);
+        return userRepository.findByAccountEmail(accountEmail)
+                .orElseThrow(()->new NotFoundException(ErrorCode.USER_NOT_FOUND));
+    }
+    // 책 저장 또는 조회
+    private Book saveOrGetBook(SelectedBook book,User user){
+        return bookRepository.findByIsbn(book.isbn())
+                .orElseGet(()->{
+                    Book newBook = createBookFromSelectBook(book,user);
+                    return bookRepository.save(newBook);
+                });
+    }
+
+    // Book 객체 생성
+    private Book createBookFromSelectBook(SelectedBook book,User user){
+        return Book.builder()
+                .bookTitle(book.bookTitle())
+                .description(book.description())
+                .imageUrl(book.imageUrl())
+                .author(book.author())
+                .publisher(book.publisher())
+                .isbn(book.isbn())
+                .user(user)
+                .build();
+    }
+    // SaveSelectedBookResponse 객체 생성
+    private SaveSelectedBookResponse createSaveSelectedBookResponse(Book book){
+        return new SaveSelectedBookResponse(
+                "책을 성공적으로 저장했습니다.",
+                book.getBookTitle(),
+                book.getDescription(),
+                book.getImageUrl(),
+                book.getAuthor(),
+                book.getPublisher(),
+                book.getIsbn()
+        );
     }
 }
