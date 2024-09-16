@@ -42,7 +42,17 @@ public enum ErrorCode {
     JWT_REFRESH_INVALID_TOKEN(HttpStatus.BAD_REQUEST,"리프레시 토큰이 유효하지 않습니다."),
     JWT_REFRESH_BAD_REQUEST(HttpStatus.BAD_REQUEST,"리프레시 토큰이 일치하지 않습니다."),
     //401
-    JWT_REFRESH_UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"리프레시 토큰 재발급 권한이 없습니다.");
+    JWT_REFRESH_UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"리프레시 토큰 재발급 권한이 없습니다."),
+
+    // 책 조회
+    //400
+    BOOK_BAD_REQUEST(HttpStatus.BAD_REQUEST,"잘못된 쿼리 요청입니다."),
+    BOOK_INVALID_VALUE(HttpStatus.BAD_REQUEST,"잘못된 파라미터의 값입니다."),
+    BOOK_ENCODING_ERROR(HttpStatus.BAD_REQUEST,"잘못된 형식의 인코딩입니다."),
+    //404
+    BOOK_INVALID_SEARCH(HttpStatus.NOT_FOUND,"존재하지 않는 검색 api입니다."),
+    //500
+    BOOK_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"시스템 오류가 발생했습니다.");
 
     //공통
     private final HttpStatus status;
