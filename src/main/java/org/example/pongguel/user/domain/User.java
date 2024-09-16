@@ -17,6 +17,9 @@ public class User {
     @Column(name = "user_id", nullable = false)
     private UUID id;
 
+    @Column(nullable = false)
+    private Long kakaoId;
+
     @Column(unique = true, nullable = false)
     private String accountEmail;
 

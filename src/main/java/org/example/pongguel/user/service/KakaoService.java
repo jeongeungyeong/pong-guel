@@ -126,6 +126,7 @@ public class KakaoService {
                .orElseGet(()->{
                    // 회원정보가 없다면 회원가입 진행
                    User newUser = User.builder()
+                           .kakaoId(kakaoUserInfo.id())
                            .accountEmail(kakaoUserInfo.email())
                            .nickname(kakaoUserInfo.nickname())
                            .profileImage(kakaoUserInfo.thumbnail_image_url())
