@@ -18,7 +18,7 @@ import java.net.URI;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/kakao")
-@Tag(name="Kakao",description = "카카오 로그인에 관련된 Api입니다.")
+@Tag(name="Kakao",description = "카카오 로그인/로그아웃에 관련된 Api입니다.")
 public class KakaoController {
     private final KakaoService kakaoService;
 
@@ -31,6 +31,7 @@ public class KakaoController {
                 .location(URI.create(kakaoAuthUtl))
                 .build();
     }
+
     // 카카오 로그인
     @GetMapping("/callback")
     @Operation(summary = "카카오 로그인",
@@ -40,5 +41,15 @@ public class KakaoController {
     public ResponseEntity<LoginResponse> kakaoLoginCallback(@RequestParam("code") String code) {
         LoginResult result = kakaoService.processKakaoLongin(code);
         return ResponseEntity.status(result.status()).body(result.loginResponse());
+    }
+
+    // 카카오 로그아웃 페이지로 리다이렉트
+    @GetMapping("/logout")
+    @Operation(summary = "카카오계정과 함께 로그아웃", description = "카카오 로그아웃 페이지로 리다이렉트됩니다.")
+    public ResponseEntity<Void> getKakaoAuthLogoutUrl() {
+        String kakaoAuthUtl = kakaoService.getKakaoAuthLogoutUrl();
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create(kakaoAuthUtl))
+                .build();
     }
 }

@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests(authz -> authz
-                        .requestMatchers("/api/kakao/**","/api/auth/**","/redis/**").permitAll() // 카카오 로그인
+                        .requestMatchers("/api/kakao/**","/api/auth/**","/redis/**","/api/main/**").permitAll() // 카카오 로그인
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll() //swagger
                         .anyRequest().authenticated()
                 )
