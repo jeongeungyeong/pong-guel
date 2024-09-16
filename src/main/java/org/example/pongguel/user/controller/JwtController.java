@@ -21,7 +21,7 @@ public class JwtController {
     public ResponseEntity<?> refreshToken(@RequestBody TokenRefreshRequest request) {
         try{
             JwtTokenDto newTokens = jwtService.reissueTokenByRefreshToken(request.refreshToken());
-            return ResponseEntity.status(HttpStatus.CREATED).body(newTokens);
+            return ResponseEntity.status(HttpStatus.OK).body(newTokens);
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
