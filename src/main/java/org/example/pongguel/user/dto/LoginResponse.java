@@ -1,5 +1,6 @@
 package org.example.pongguel.user.dto;
 
 public record LoginResponse(String message,
-                            UserInfoResponse userInfoResponse) {
+                            UserInfoResponse userInfoResponse,
+                            JwtTokenDto jwtTokenDto) {
 }

@@ -1,12 +1,11 @@
 package org.example.pongguel.user.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
+import org.example.pongguel.jwt.JwtTokenProvider;
 import org.example.pongguel.exception.*;
-import org.example.pongguel.user.domain.Grade;
+import org.example.pongguel.user.domain.Role;
 import org.example.pongguel.user.domain.User;
 import org.example.pongguel.user.dto.*;
 import org.example.pongguel.user.repository.UserRepository;
@@ -20,14 +19,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Mono;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static org.example.pongguel.exception.ErrorCode.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +39,7 @@ public class KakaoService {
 
     private final WebClient webClient;
     private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // 카카오 인증코드 발급 URL 생성
     public String getKakaoAuthUrl(){
@@ -60,10 +52,15 @@ public class KakaoService {
         String accessToken = getAccessToken(code);
         KakaoUserInfo kakaoUserInfo = getKakaoUserInfo(accessToken);
         UserInfoResponse userInfoResponse = processKakaoUser(kakaoUserInfo);
-
+        // 카카오 사용자 조회 및 회원가입
         HttpStatus status = userInfoResponse.isNewUser() ? HttpStatus.CREATED : HttpStatus.OK;
         String message = userInfoResponse.isNewUser() ? "회원가입 및 카카오 로그인에 성공했습니다!" : "카카오 로그인에 성공했습니다.";
-        return new LoginResult(status,new LoginResponse(message,userInfoResponse));
+        // jwt 토큰 발급
+        String jwtAccessToken = jwtTokenProvider.createAccessToken(userInfoResponse.accountEmail());
+        String jwtRefreshToken = jwtTokenProvider.createRefreshToken(userInfoResponse.accountEmail());
+        JwtTokenDto jwtTokenDto = new JwtTokenDto(jwtAccessToken, jwtRefreshToken);
+        // LoginResult 객체 생성 및 반환
+        return new LoginResult(status,new LoginResponse(message,userInfoResponse,jwtTokenDto));
     }
 
     // 카카오 accessToken 발급
@@ -132,11 +129,11 @@ public class KakaoService {
                            .accountEmail(kakaoUserInfo.email())
                            .nickname(kakaoUserInfo.nickname())
                            .profileImage(kakaoUserInfo.thumbnail_image_url())
-                           .grade(Grade.NORMAL)
+                           .role(Role.ROLE_USER)
                            .build();
                    return userRepository.save(newUser);
                });
        return new UserInfoResponse(user.getAccountEmail(), user.getNickname(),
-               user.getProfileImage(),user.getGrade(),isNewUser);
+               user.getProfileImage(),user.getRole(),isNewUser);
     }
 }
