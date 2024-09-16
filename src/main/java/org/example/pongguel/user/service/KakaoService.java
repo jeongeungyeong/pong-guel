@@ -28,18 +28,18 @@ public class KakaoService {
 
     @Value("${kakao.client_id}")
     private String clientId;
-    @Value("${kakao.redirect_uri}")
-    private String redirectUri;
-    @Value("${kakao.logout_redirect_uri}")
-    private String logoutRedirectUri;
-    @Value("${kakao.oauth_uri}")
-    private String oauthUri;
-    @Value("${kakao.oauth_token_uri}")
-    private String oauthTokenUri;
-    @Value("${kakao.oauth_user_uri}")
-    private String oauthUserUri;
-    @Value("${kakao.oauth_logout_uri}")
-    private String oauthLogoutUri;
+    @Value("${kakao.redirect_url}")
+    private String redirectUrl;
+    @Value("${kakao.logout_redirect_url}")
+    private String logoutRedirectUrl;
+    @Value("${kakao.oauth_url}")
+    private String oauthUrl;
+    @Value("${kakao.oauth_token_url}")
+    private String oauthTokenUrl;
+    @Value("${kakao.oauth_user_url}")
+    private String oauthUserUrl;
+    @Value("${kakao.oauth_logout_url}")
+    private String oauthLogoutUrl;
 
     private final WebClient webClient;
     private final UserRepository userRepository;
@@ -48,7 +48,7 @@ public class KakaoService {
     // 카카오 인증코드 발급 URL 생성
     public String getKakaoAuthUrl(){
         return String.format("%s?response_type=code&client_id=%s&redirect_uri=%s",
-                oauthUri, clientId, redirectUri);
+                oauthUrl, clientId, redirectUrl);
     }
 
     // 카카오 로그인 및 회원가입 진행
@@ -70,7 +70,7 @@ public class KakaoService {
     // 카카오 로그아웃 URL 생성
     public String getKakaoAuthLogoutUrl(){
         return String.format("%s?response_type=code&client_id=%s&logout_redirect_uri=%s",
-                oauthLogoutUri, clientId, logoutRedirectUri);
+                oauthLogoutUrl, clientId, logoutRedirectUrl);
     }
 
     // 카카오 accessToken 발급
@@ -78,14 +78,14 @@ public class KakaoService {
         MultiValueMap<String,String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code"); // 인증방식 'authorization_code로 지정
         body.add("client_id", clientId); // 클라이언트 ID 추가
-        body.add("redirect_uri", redirectUri); // 리다이렉트 ID 추가
+        body.add("redirect_uri", redirectUrl); // 리다이렉트 ID 추가
         body.add("code", code); // 인증 코드 추가
 
         // WebClient를 사용하여 POST 요청
         try {
             return webClient.post()
                     // 토큰 요청 URI
-                    .uri(oauthTokenUri)
+                    .uri(oauthTokenUrl)
                     // 컨텐츠 타입 설정
                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                     // 요청 본문에 form 데이터 추가
@@ -109,7 +109,7 @@ public class KakaoService {
     private KakaoUserInfo getKakaoUserInfo(String accessToken){
        try {
            return webClient.post()
-                   .uri(oauthUserUri)
+                   .uri(oauthUserUrl)
                    .header("Authorization", "Bearer " + accessToken)
                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                    .retrieve()
