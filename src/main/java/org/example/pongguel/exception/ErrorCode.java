@@ -35,8 +35,14 @@ public enum ErrorCode {
     //500
     KAKAO_ACCESS_TOKEN_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"OAuth 서버 일시적 오류가 생겼습니다."),
     KAKAO_USER_INFO_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"카카오서버 내부의 일시적 오류가 생겼습니다."),
-    PROCESS_USER_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"데이터베이스 오류가 생겼습니다.");
+    PROCESS_USER_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"데이터베이스 오류가 생겼습니다."),
 
+    // jwt 발급
+    //400
+    JWT_REFRESH_INVALID_TOKEN(HttpStatus.BAD_REQUEST,"리프레시 토큰이 유효하지 않습니다."),
+    JWT_REFRESH_BAD_REQUEST(HttpStatus.BAD_REQUEST,"리프레시 토큰이 일치하지 않습니다."),
+    //401
+    JWT_REFRESH_UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"리프레시 토큰 재발급 권한이 없습니다.");
 
     //공통
     private final HttpStatus status;
