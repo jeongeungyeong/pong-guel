@@ -1,10 +1,8 @@
-package org.example.pongguel.user.service;
+package org.example.pongguel.jwt.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.pongguel.exception.BadRequestException;
-import org.example.pongguel.exception.ErrorCode;
 import org.example.pongguel.user.domain.User;
-import org.example.pongguel.user.domain.CustomUserDeatils;
+import org.example.pongguel.jwt.domain.CustomUserDetails;
 import org.example.pongguel.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,9 +14,9 @@ public class UserDetailService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public CustomUserDeatils loadUserByUsername(String email) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByAccountEmail(email)
-                .orElseThrow(() -> new BadRequestException(ErrorCode.USER_NOT_FOUND));
-        return new CustomUserDeatils(user);
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        return new CustomUserDetails(user);
     }
 }
