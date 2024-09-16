@@ -2,7 +2,6 @@ package org.example.pongguel.config;
 
 import lombok.RequiredArgsConstructor;
 import org.example.pongguel.jwt.JwtAuthenticationFilter;
-import org.example.pongguel.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean

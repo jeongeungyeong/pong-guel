@@ -43,6 +43,7 @@ public enum ErrorCode {
     JWT_REFRESH_BAD_REQUEST(HttpStatus.BAD_REQUEST,"리프레시 토큰이 일치하지 않습니다."),
     //401
     JWT_REFRESH_UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"리프레시 토큰 재발급 권한이 없습니다."),
+    JWT_INVALID_TOKEN(HttpStatus.UNAUTHORIZED,"권한이 없는 토큰입니다."),
 
     // 책 조회
     //400

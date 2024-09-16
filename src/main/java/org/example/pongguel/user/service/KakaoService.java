@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.pongguel.jwt.JwtTokenProvider;
 import org.example.pongguel.exception.*;
+import org.example.pongguel.jwt.dto.JwtTokenDto;
 import org.example.pongguel.user.domain.Role;
 import org.example.pongguel.user.domain.User;
 import org.example.pongguel.user.dto.*;

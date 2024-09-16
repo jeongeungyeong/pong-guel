@@ -1,11 +1,11 @@
-package org.example.pongguel.user.service;
+package org.example.pongguel.jwt.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.pongguel.jwt.JwtTokenProvider;
 import org.example.pongguel.exception.BadRequestException;
 import org.example.pongguel.exception.ErrorCode;
-import org.example.pongguel.user.dto.JwtTokenDto;
+import org.example.pongguel.jwt.JwtTokenProvider;
+import org.example.pongguel.jwt.dto.JwtTokenDto;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

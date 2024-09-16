@@ -1,11 +1,11 @@
-package org.example.pongguel.user.controller;
+package org.example.pongguel.jwt.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.example.pongguel.user.dto.JwtTokenDto;
-import org.example.pongguel.user.dto.TokenRefreshRequest;
-import org.example.pongguel.user.service.JwtService;
+import org.example.pongguel.jwt.dto.JwtTokenDto;
+import org.example.pongguel.jwt.dto.TokenRefreshRequest;
+import org.example.pongguel.jwt.service.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

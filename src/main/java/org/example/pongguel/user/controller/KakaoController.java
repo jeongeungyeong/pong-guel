@@ -2,12 +2,9 @@ package org.example.pongguel.user.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.example.pongguel.user.dto.KakaoUserInfo;
 import org.example.pongguel.user.dto.LoginResponse;
 import org.example.pongguel.user.dto.LoginResult;
-import org.example.pongguel.user.dto.UserInfoResponse;
 import org.example.pongguel.user.service.KakaoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

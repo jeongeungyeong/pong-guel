@@ -1,5 +1,6 @@
-package org.example.pongguel.user.domain;
+package org.example.pongguel.jwt.domain;
 
+import org.example.pongguel.user.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,10 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-public class CustomUserDeatils implements UserDetails {
+public class CustomUserDetails implements UserDetails {
     private final User user;
 
-    public CustomUserDeatils(User user) {
+    public CustomUserDetails(User user) {
         this.user = user;
     }
 
