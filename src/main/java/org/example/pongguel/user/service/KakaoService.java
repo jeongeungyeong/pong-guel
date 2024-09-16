@@ -30,12 +30,16 @@ public class KakaoService {
     private String clientId;
     @Value("${kakao.redirect_uri}")
     private String redirectUri;
+    @Value("${kakao.logout_redirect_uri}")
+    private String logoutRedirectUri;
     @Value("${kakao.oauth_uri}")
     private String oauthUri;
     @Value("${kakao.oauth_token_uri}")
     private String oauthTokenUri;
     @Value("${kakao.oauth_user_uri}")
     private String oauthUserUri;
+    @Value("${kakao.oauth_logout_uri}")
+    private String oauthLogoutUri;
 
     private final WebClient webClient;
     private final UserRepository userRepository;
@@ -61,6 +65,12 @@ public class KakaoService {
         JwtTokenDto jwtTokenDto = new JwtTokenDto(jwtAccessToken, jwtRefreshToken);
         // LoginResult 객체 생성 및 반환
         return new LoginResult(status,new LoginResponse(message,userInfoResponse,jwtTokenDto));
+    }
+
+    // 카카오 로그아웃 URL 생성
+    public String getKakaoAuthLogoutUrl(){
+        return String.format("%s?response_type=code&client_id=%s&logout_redirect_uri=%s",
+                oauthLogoutUri, clientId, logoutRedirectUri);
     }
 
     // 카카오 accessToken 발급
