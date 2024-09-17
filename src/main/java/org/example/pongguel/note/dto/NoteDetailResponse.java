@@ -2,7 +2,7 @@ package org.example.pongguel.note.dto;
 
 import java.time.LocalDate;
 
-public record NoteCreateResponse(String message,
+public record NoteDetailResponse(String message,
                                  String nickname,
                                  Long bookId,
                                  String bookTitle,

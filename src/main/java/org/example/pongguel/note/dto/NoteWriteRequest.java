@@ -1,5 +1,5 @@
 package org.example.pongguel.note.dto;
 
-public record NoteCreateRequest(String noteTitle,
-                                String contents) {
+public record NoteWriteRequest(String noteTitle,
+                               String contents) {
 }
