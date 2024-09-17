@@ -57,8 +57,15 @@ public enum ErrorCode {
     //409
     BOOK_LIKE_CONFLICT(HttpStatus.CONFLICT,"이미 좋아요를 누른 책입니다."),
     //500
-    BOOK_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"시스템 오류가 발생했습니다.");
+    BOOK_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"시스템 오류가 발생했습니다."),
 
+    // 노트
+    //401
+    NOTE_USER_UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"노트 수정의 권한이 없는 사용자입니다."),
+    //404
+    NOTE_NOT_FOUND(HttpStatus.NOT_FOUND,"존재하지 않는 노트입니다."),
+    //409
+    NOTE_BOOKMARK_CONFLICT(HttpStatus.CONFLICT, "보관함에 있는 노트는 즐겨찾기를 할 수 없습니다.");
     //공통
     private final HttpStatus status;
     private final String message;
