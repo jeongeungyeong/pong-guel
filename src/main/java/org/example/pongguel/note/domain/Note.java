@@ -35,6 +35,9 @@ public class Note {
     @Column(name = "is_bookmarked",nullable = false)
     private boolean isBookmarked=false;
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted=false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -43,8 +46,34 @@ public class Note {
     @JoinColumn(name = "book_id")
     private Book book;
 
+    // 제목 업데이트
+    public void updateNoteTitle(String newTitle){
+        if (newTitle != null && !newTitle.trim().isEmpty()){
+            this.noteTitle = newTitle;
+        }
+    }
+
+    // 내용 업데이트
+    public void updateContents(String newContents) {
+        if (newContents != null) {
+            this.contents = newContents;
+        }
+    }
+
+    // 생성일 -> 수정일로 업데이트
+    public void updateNoteCreatedAt(LocalDate newDate) {
+        if (newDate != null) {
+            this.noteCreatedAt = newDate;
+        }
+    }
+
     // 즐겨찾기 기능
     public void toggleBookmark(){
         this.isBookmarked=!this.isBookmarked;
+    }
+
+    // softDelete 기능
+    public void markAsDeleted(){
+        this.isDeleted= true;
     }
 }
