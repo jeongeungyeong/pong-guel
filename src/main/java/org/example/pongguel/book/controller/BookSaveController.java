@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/saved-books")
-@Tag(name="BookSave",description = "저장된 책과 관련된 Api입니다.")
+@Tag(name="Book",description = "책 서비스 관련된 Api입니다.")
 public class BookSaveController {
     private final SavedBookService savedBookService;
     private final JwtUtil jwtUtil;
