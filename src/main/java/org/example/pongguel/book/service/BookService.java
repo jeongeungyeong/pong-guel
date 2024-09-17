@@ -4,17 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.pongguel.book.domain.Book;
-import org.example.pongguel.book.dto.SaveSelectedBookResponse;
-import org.example.pongguel.book.dto.SearchBookList;
-import org.example.pongguel.book.dto.SearchBookResponse;
-import org.example.pongguel.book.dto.SelectedBook;
+import org.example.pongguel.book.dto.*;
 import org.example.pongguel.book.repository.BookRepository;
-import org.example.pongguel.exception.ErrorCode;
-import org.example.pongguel.exception.NotFoundException;
-import org.example.pongguel.exception.UnauthorizedException;
-import org.example.pongguel.jwt.JwtTokenProvider;
 import org.example.pongguel.user.domain.User;
-import org.example.pongguel.user.repository.UserRepository;
+import org.example.pongguel.user.service.ValidateUser;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,12 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriUtils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class BookService {
     @Value("${naver.client_id}")
     private String clientId;
@@ -39,8 +34,7 @@ public class BookService {
 
     private final WebClient webClient;
     private final BookRepository bookRepository;
-    private final UserRepository userRepository;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final ValidateUser validateUser;
 
     // 네이버 책 조회하기
     public SearchBookList searchBookList (String query, int display, int start, String sort) {
@@ -82,10 +76,9 @@ public class BookService {
     }
 
     // 사용자의 책 선택 및 저장
-    @Transactional
     public SaveSelectedBookResponse SaveSelectedBook (String token,Long isbn){
         // 1. 토큰 유효성 검사
-        User user = getUserFromToken(token);
+        User user = validateUser.getUserFromToken(token);
         // 2. 검색 결과에서 찾은 ISBN으로 책 찾기
         SelectedBook selectedBook = findBookByIsbn(isbn);
         // 3.  책 저장 또는 조회 Book 객체 생성
@@ -121,15 +114,6 @@ public class BookService {
                        })
                .block();
     }
-    // 토큰 유효성 검사 및 유저 정보 조회
-    private User getUserFromToken(String token) {
-        if (!jwtTokenProvider.validateToken(token)) {
-            throw new UnauthorizedException(ErrorCode.JWT_INVALID_TOKEN);
-        }
-        String accountEmail = jwtTokenProvider.getUserEmail(token);
-        return userRepository.findByAccountEmail(accountEmail)
-                .orElseThrow(()->new NotFoundException(ErrorCode.USER_NOT_FOUND));
-    }
     // 책 저장 또는 조회
     private Book saveOrGetBook(SelectedBook book,User user){
         return bookRepository.findByIsbn(book.isbn())
@@ -148,6 +132,8 @@ public class BookService {
                 .author(book.author())
                 .publisher(book.publisher())
                 .isbn(book.isbn())
+                .createdAt(LocalDate.now())
+                .isLiked(false) //default=false
                 .user(user)
                 .build();
     }

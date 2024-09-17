@@ -15,7 +15,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id", nullable = false)
-    private UUID id;
+    private UUID userId;
 
     @Column(nullable = false)
     private Long kakaoId;
