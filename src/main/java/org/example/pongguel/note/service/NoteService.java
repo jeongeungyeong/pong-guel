@@ -40,7 +40,9 @@ public class NoteService {
                 .user(user)
                 .book(book)
                 .build();
-        // 4. NoteCreateResponse 생성 및 반환
+        // 4. 노트 저장
+        noteRepository.save(note);
+        // 5. NoteCreateResponse 생성 및 반환
         return createNoteCreateResponse(note);
     }
     // 노트 상세 조회
