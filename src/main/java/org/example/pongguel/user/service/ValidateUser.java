@@ -1,4 +1,4 @@
-package org.example.pongguel.book.service;
+package org.example.pongguel.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.pongguel.exception.ErrorCode;
