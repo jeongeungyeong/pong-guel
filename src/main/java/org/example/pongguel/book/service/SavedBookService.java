@@ -43,7 +43,6 @@ public class SavedBookService {
                     .collect(Collectors.toList());
         }
     }
-    // 책 상세보기
-
+    // 저장한 책 상세보기
     // 사용자가 저장한 책 삭제
 }
