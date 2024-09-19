@@ -93,38 +93,6 @@ public class BookService {
         return createSaveSelectedBookResponse(book);
     }
 
-    // 책 상세 보기
-    public BookDetailWithNoteListResponse getBookDetails(String token, Long bookId){
-        // 1. 토큰 유효성 검사
-        User user = validateUser.getUserFromToken(token);
-        // 2. bookId로 책 정보 가져오기
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(()-> new NotFoundException(ErrorCode.BOOK_SAVED_NOT_FOUND));
-        // 3. 책의 노트 리스트 가져오기
-        List<Note> noteList = noteRepository.findByBook_BookIdAndIsDeletedOrderByNoteCreatedAtDesc(bookId,false);
-        // 4. BookDeatilWithNoteListResponse의 노트 리스트 생성
-        List<BookDetailWithNoteListResponse.NoteList> notesList = noteList.stream()
-                .map(note -> new BookDetailWithNoteListResponse.NoteList(
-                        note.getNoteId(),
-                        note.getNoteTitle(),
-                        note.getNoteCreatedAt(),
-                        note.isBookmarked()
-                )).collect(Collectors.toList());
-        // 5. BookDeatilWithNoteListResponse의 생성 및 반환
-        return new BookDetailWithNoteListResponse(
-                "책의 상세페이지 조회의 성공했습니다.",
-                book.getBookId(),
-                book.getBookTitle(),
-                book.getDescription(),
-                book.getImageUrl(),
-                book.getAuthor(),
-                book.getIsbn(),
-                book.getPublisher(),
-                book.isLiked(),
-                notesList
-        );
-    }
-
     // ISBN으로 책 조회
     private SelectedBook findBookByIsbn(Long isbn){
        return webClient.get()
