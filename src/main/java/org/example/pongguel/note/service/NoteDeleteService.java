@@ -19,8 +19,6 @@ public class NoteDeleteService {
     private final NoteRepository noteRepository;
     private final ValidateUser validateUser;
 
-    // sofrdelete한 note 조회
-
     // 노트 softdelete 삭제 (논리적 삭제)
     public NoteDeleteResponse softDeleteNote(String token, Long noteId) {
         // 1. 토큰 유효성 검사 및 사용자 권한 인증
