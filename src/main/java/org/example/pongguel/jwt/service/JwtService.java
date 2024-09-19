@@ -21,10 +21,10 @@ public class JwtService {
     // 토큰 재발급
     public JwtTokenDto reissueTokenByRefreshToken(String refreshToken) {
         // 1. 토큰 유효성 검사
-            if (!jwtTokenProvider.validateToken(refreshToken)) {
+            if (!jwtTokenProvider.validateRefreshToken(refreshToken)) {
                 throw new BadRequestException(ErrorCode.JWT_REFRESH_INVALID_TOKEN);
             }
-            String email = jwtTokenProvider.getUserEmail(refreshToken);
+            String email = jwtTokenProvider.getUserEmail(refreshToken,false);
             String savedRefreshToken = redisTemplate.opsForValue().get("RT:" + email);
 
             if (savedRefreshToken == null ||
