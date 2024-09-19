@@ -23,23 +23,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException{
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String token = jwtUtil.extractTokenFromRequest(request);
+            log.debug("추출된 토큰: {}", token);
 
             if (StringUtils.isNotBlank(token)) {
-                if (jwtTokenProvider.validateToken(token)) {
+                if (jwtTokenProvider.validateAccessToken(token)) {
                     Authentication authentication = jwtTokenProvider.getAuthentication(token);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                    log.debug("Set Authentication to security context for '{}', uri: {}", authentication.getName(), request.getRequestURI());
+                    log.debug("사용자 인증 설정 완료: {}", authentication.getName());
                 } else {
-                    log.debug("Invalid JWT token.");
+                    log.debug("유효하지 않은 JWT 토큰입니다.");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
                 }
-            } else {
-                log.debug("JWT token is not provided.");
             }
         } catch (Exception e) {
-            log.error("Cannot set user authentication: {}", e.getMessage());
+            log.error("사용자 인증을 설정할 수 없습니다: {}", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
         }
 
         filterChain.doFilter(request, response);

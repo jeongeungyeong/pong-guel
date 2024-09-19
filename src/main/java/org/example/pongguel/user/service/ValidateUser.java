@@ -15,12 +15,12 @@ public class ValidateUser {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
 
-    // 토큰 유효성 검사 및 유저 정보 조회
+    // 액세스 토큰 유효성 검사 및 유저 정보 조회
     public User getUserFromToken(String token) {
-        if (!jwtTokenProvider.validateToken(token)) {
+        if (!jwtTokenProvider.validateAccessToken(token)) {
             throw new UnauthorizedException(ErrorCode.JWT_INVALID_TOKEN);
         }
-        String accountEmail = jwtTokenProvider.getUserEmail(token);
+        String accountEmail = jwtTokenProvider.getUserEmail(token,true);
         return userRepository.findByAccountEmail(accountEmail)
                 .orElseThrow(()->new NotFoundException(ErrorCode.USER_NOT_FOUND));
     }

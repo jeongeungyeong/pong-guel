@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.pongguel.book.dto.*;
 import org.example.pongguel.book.service.BookService;
+import org.example.pongguel.book.service.ShareSavedBookService;
 import org.example.pongguel.exception.ErrorCode;
 import org.example.pongguel.exception.UnauthorizedException;
 import org.example.pongguel.jwt.JwtUtil;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name="Book",description = "책 서비스 관련된 Api입니다.")
 public class BookController {
     private final BookService bookService;
+    private final ShareSavedBookService shareSavedBookService;
     private final JwtUtil jwtUtil;
 
     @GetMapping("/search")
@@ -41,5 +43,28 @@ public class BookController {
         }
         SaveSelectedBookResponse saveSelectedBook = bookService.SaveSelectedBook(token,isbn);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveSelectedBook);
+    }
+
+    @GetMapping("/{bookId}/detail")
+    @Operation(summary = "사용자가 저장한 책의 상세정보를 조회합니다.", description = "사용자가 저장한 책의 정보와 좋아요, 노트리스트를 조회합니다.")
+    public ResponseEntity<BookDetailWithNoteListResponse> getBookDetails(HttpServletRequest request,
+                                                                         @PathVariable Long bookId){
+        String token = jwtUtil.extractTokenFromRequest(request);
+        if (token == null) {
+            throw new UnauthorizedException(ErrorCode.JWT_INVALID_TOKEN);
+        }
+        BookDetailWithNoteListResponse bookDetails = bookService.getBookDetails(token,bookId);
+        return ResponseEntity.status(HttpStatus.OK).body(bookDetails);
+    }
+    @PostMapping("/{bookId}/share")
+    @Operation(summary = "사용자가 저장한 책을 외부로 공유합니다.", description = "사용자가 저장한 책을 외부로 공유합니다. 공유토큰도 함께 생성됩니다.")
+    public ResponseEntity<ShareBookResponse> shareBook(HttpServletRequest request,
+                                                       @PathVariable Long bookId){
+        String token = jwtUtil.extractTokenFromRequest(request);
+        if (token == null) {
+            throw new UnauthorizedException(ErrorCode.JWT_INVALID_TOKEN);
+        }
+        ShareBookResponse shareBookResponse = shareSavedBookService.shareBook(token,bookId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(shareBookResponse);
     }
 }

@@ -1,7 +1,6 @@
 package org.example.pongguel.note.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.pongguel.book.dto.LikedBookListResponse;
 import org.example.pongguel.exception.ConflictException;
 import org.example.pongguel.exception.ErrorCode;
 import org.example.pongguel.exception.NotFoundException;

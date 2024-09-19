@@ -1,5 +1,6 @@
 package org.example.pongguel.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.pongguel.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
@@ -32,11 +33,17 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests(authz -> authz
-                        .requestMatchers("/api/kakao/**","/api/auth/**","/redis/**","/api/main/**","/api/books/search").permitAll() // 카카오 로그인
+                        .requestMatchers("/api/kakao/**","/api/auth/**","/redis/**","/api/main/**","/api/books/search").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll() //swagger
+                        .requestMatchers("/api/shared/**").permitAll() // 공유링크
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.getWriter().write("Unauthorized: " + authException.getMessage());
+                        }));
         return http.build();
     }
 
