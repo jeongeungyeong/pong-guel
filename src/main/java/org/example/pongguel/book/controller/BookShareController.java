@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.example.pongguel.book.dto.SharedBookDetailWithNoteListResponse;
 import org.example.pongguel.book.service.ShareSavedBookService;
-import org.example.pongguel.jwt.JwtUtil;
 import org.example.pongguel.note.dto.NoteDetailResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name="SharedBook",description = "외부인의 공유된 책 관련 서비스 관련된 Api입니다.")
 public class BookShareController {
     private final ShareSavedBookService shareSavedBookService;
-    private final JwtUtil jwtUtil;
 
     // 외부인 책 상세 열람
     @GetMapping("/books/{shareToken}")
