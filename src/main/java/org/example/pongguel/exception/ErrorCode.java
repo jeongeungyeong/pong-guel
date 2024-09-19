@@ -50,6 +50,8 @@ public enum ErrorCode {
     BOOK_BAD_REQUEST(HttpStatus.BAD_REQUEST,"잘못된 쿼리 요청입니다."),
     BOOK_INVALID_VALUE(HttpStatus.BAD_REQUEST,"잘못된 파라미터의 값입니다."),
     BOOK_ENCODING_ERROR(HttpStatus.BAD_REQUEST,"잘못된 형식의 인코딩입니다."),
+    //401
+    BOOK_DELETED_USER_UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"책 삭제 권한이 없는 사용자입니다."),
     //404
     BOOK_INVALID_SEARCH(HttpStatus.NOT_FOUND,"존재하지 않는 검색 api입니다."),
     BOOK_SAVED_NOT_FOUND(HttpStatus.NOT_FOUND,"저장되지 않은 책입니다."),
