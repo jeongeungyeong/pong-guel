@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface NoteRepository extends JpaRepository<Note, Long> {
@@ -16,4 +17,6 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     List<Note> findByBook_BookIdAndIsDeletedOrderByNoteCreatedAtDesc(Long bookId, boolean isDeleted);
     // 사용자가 작성한 노트 조회 (db에서 노트 최신순으로 정렬)
     List<Note> findAllByUser_userIdAndIsDeletedOrderByNoteCreatedAtDesc(UUID userId, boolean isDeleted);
+    // bookId와 noteId로 조회
+    Optional<Note> findByBook_bookIdAndNoteId(Long bookId, Long noteId);
 }
