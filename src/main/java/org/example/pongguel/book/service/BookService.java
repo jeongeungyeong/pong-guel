@@ -6,10 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.pongguel.book.domain.Book;
 import org.example.pongguel.book.dto.*;
 import org.example.pongguel.book.repository.BookRepository;
-import org.example.pongguel.exception.ErrorCode;
-import org.example.pongguel.exception.NotFoundException;
-import org.example.pongguel.note.domain.Note;
-import org.example.pongguel.note.repository.NoteRepository;
 import org.example.pongguel.user.domain.User;
 import org.example.pongguel.user.service.ValidateUser;
 import org.json.JSONObject;
@@ -23,7 +19,6 @@ import org.springframework.web.util.UriUtils;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +34,6 @@ public class BookService {
 
     private final WebClient webClient;
     private final BookRepository bookRepository;
-    private final NoteRepository noteRepository;
     private final ValidateUser validateUser;
 
     // 네이버 책 조회하기
