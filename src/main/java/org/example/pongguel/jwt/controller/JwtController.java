@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
-@Tag(name="JWT",description = "JWT토큰 발급 관련 API입니다.")
+@Tag(name="JWT",description = "JWT토큰 재발급 관련 API입니다.")
 public class JwtController {
     private final JwtService jwtService;
 

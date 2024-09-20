@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/bookmarked-notes")
-@Tag(name="Note", description = "노트 서비스와 관련된 Api입니다.")
+@Tag(name="Note_BOOKMARK", description = "노트 즐겨찾기 서비스와 관련된 Api입니다.")
 public class NoteBookmarkController {
     private final NoteBookmarkService noteBookmarkService;
     private final JwtUtil jwtUtil;

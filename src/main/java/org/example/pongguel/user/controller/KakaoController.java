@@ -15,7 +15,7 @@ import java.net.URI;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/kakao")
-@Tag(name="Kakao",description = "카카오 로그인/로그아웃에 관련된 Api입니다.")
+@Tag(name="USER_KAKAO",description = "카카오 로그인/로그아웃에 관련된 Api입니다.")
 public class KakaoController {
     private final KakaoService kakaoService;
 
