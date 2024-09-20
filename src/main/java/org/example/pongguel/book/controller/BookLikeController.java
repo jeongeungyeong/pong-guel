@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/liked-books")
-@Tag(name="Book",description = "책 좋아요와 관련된 Api입니다.")
+@Tag(name="Book_Like",description = "책 좋아요와 관련된 Api입니다.")
 public class BookLikeController {
     private final LikedBookService likedBookService;
     private final JwtUtil jwtUtil;

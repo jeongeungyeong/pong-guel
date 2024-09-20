@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/saved-books")
-@Tag(name="Book",description = "사용자가 저장한 책 서비스 관련된 Api입니다.")
+@Tag(name="Book_SAVE",description = "사용자가 저장한 책 서비스 관련된 Api입니다.")
 public class BookSaveController {
     private final SavedBookService savedBookService;
     private final ShareSavedBookService shareSavedBookService;

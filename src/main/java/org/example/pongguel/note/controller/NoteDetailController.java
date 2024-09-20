@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/notes-detail")
-@Tag(name="Note", description = "노트 서비스와 관련된 Api입니다.")
+@Tag(name="Note_DETAIL", description = "노트 상세 서비스와 관련된 Api입니다.")
 public class NoteDetailController {
     private final NoteDetailService noteDetailService;
     private final NoteDeleteService noteDeleteService;
