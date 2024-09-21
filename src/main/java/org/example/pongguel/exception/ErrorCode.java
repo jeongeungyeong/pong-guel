@@ -30,6 +30,7 @@ public enum ErrorCode {
     KAKAO_USER_INFO_FORBIDDEN(HttpStatus.FORBIDDEN,"카카오 정보 요청 권한이 없습니다."),
     //404
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
+    KAKAO_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND,"카카오 리프레시토큰이 존재하지 않습니다. 다시 로그인해주세요."),
     //409
     PROCESS_USER_CONFLICT(HttpStatus.CONFLICT,"이미 가입한 회원입니다."),
     //500
