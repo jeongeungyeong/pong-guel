@@ -26,8 +26,8 @@ public class KakaoSignOutController {
 
     // 카카오 로그아웃 페이지로 리다이렉트
     @GetMapping("/sign-out")
-    @Operation(summary = "카카오 액세스 토큰 재발급", description = ".")
-    public ResponseEntity<String> reissueToken(HttpServletRequest request) {
+    @Operation(summary = "카카오 로그아웃 기능입니다.", description = "서비스 로그아웃뿐만 아니라 카카오톡 액세스토큰도 만료합니다.")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
         String token = jwtUtil.extractTokenFromRequest(request);
         if (token == null) {
             throw new UnauthorizedException(ErrorCode.JWT_INVALID_TOKEN);
