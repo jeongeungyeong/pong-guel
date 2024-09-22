@@ -23,5 +23,7 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     List<Note> findByBook_BookId(Long bookId);
     // 책 관련 모든 노트 삭제
     void deleteByBook_BookId(Long bookId);
+    // 사용자 관련 모든 노트 삭제
+    void deleteAllNotesByUser_UserId(UUID userId);
 }
 

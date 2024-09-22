@@ -19,4 +19,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
    // 사용자가 좋아요한 책 정보 찾기
     @Query("SELECT b FROM Book b WHERE b.user.userId = :userId AND b.isLiked=true")
     List<Book> findByUser_UserIdAndIsLiked(@Param("userId") UUID userId);
+    // 사용자가 저장한 책 삭제
+    void deleteAllBooksByUser_UserId(UUID userId);
 }

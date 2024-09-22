@@ -30,12 +30,14 @@ public enum ErrorCode {
     KAKAO_USER_INFO_FORBIDDEN(HttpStatus.FORBIDDEN,"카카오 정보 요청 권한이 없습니다."),
     //404
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
+    KAKAO_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND,"카카오 리프레시토큰이 존재하지 않습니다. 다시 로그인해주세요."),
     //409
     PROCESS_USER_CONFLICT(HttpStatus.CONFLICT,"이미 가입한 회원입니다."),
     //500
     KAKAO_ACCESS_TOKEN_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"OAuth 서버 일시적 오류가 생겼습니다."),
     KAKAO_USER_INFO_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"카카오서버 내부의 일시적 오류가 생겼습니다."),
     PROCESS_USER_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"데이터베이스 오류가 생겼습니다."),
+    KAKAO_LEAVE_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"탈퇴 중 서비스 오류가 발생했습니다"),
 
     // jwt 발급
     //400

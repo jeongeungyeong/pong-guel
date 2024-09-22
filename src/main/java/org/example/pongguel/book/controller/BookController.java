@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.pongguel.book.dto.*;
 import org.example.pongguel.book.service.BookService;
-import org.example.pongguel.book.service.ShareSavedBookService;
+import org.example.pongguel.book.service.SharedBooksDetailService;
 import org.example.pongguel.exception.ErrorCode;
 import org.example.pongguel.exception.UnauthorizedException;
 import org.example.pongguel.jwt.JwtUtil;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name="Book",description = "책 서비스 관련된 Api입니다.")
 public class BookController {
     private final BookService bookService;
-    private final ShareSavedBookService shareSavedBookService;
+    private final SharedBooksDetailService sharedBooksDetailService;
     private final JwtUtil jwtUtil;
 
     @GetMapping("/search")
