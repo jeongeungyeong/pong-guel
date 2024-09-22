@@ -37,6 +37,7 @@ public enum ErrorCode {
     KAKAO_ACCESS_TOKEN_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"OAuth 서버 일시적 오류가 생겼습니다."),
     KAKAO_USER_INFO_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"카카오서버 내부의 일시적 오류가 생겼습니다."),
     PROCESS_USER_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"데이터베이스 오류가 생겼습니다."),
+    KAKAO_LEAVE_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"탈퇴 중 서비스 오류가 발생했습니다"),
 
     // jwt 발급
     //400
