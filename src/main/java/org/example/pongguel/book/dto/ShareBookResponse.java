@@ -6,5 +6,6 @@ public record ShareBookResponse(String message,
                                 Long bookId,
                                 String bookTitle,
                                 String nickname,
-                                String userEmail) {
+                                String userEmail,
+                                boolean messageSent) {
 }
