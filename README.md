@@ -15,6 +15,8 @@
 #### [4. API 명세](#API-명세)
 #### [5. 트러블 슈팅](#트러블-슈팅)
 #### [6. 고민의 흔적](#고민의-흔적)
+#### [7. Git Commit Message Convention](#Git-Commit-Message-Convention)
+#### [8. Git Branch 전략](#Git-Branch-전략)
 
 </br>
 
@@ -40,12 +42,15 @@
   
   kakao:
     client_id: 
-    redirect_url: 
+    redirect_url:
     logout_redirect_url: #메인페이지
-    oauth_url: 
-    oauth_token_url: 
-    oauth_user_url: 
-    oauth_logout_url: 
+    user_base_url: 
+    kauth_base_url: 
+    user_info_url: 
+    send_base_url: 
+    send_me_url: 
+    user_friend_url: 
+    send_friends_url: 
   
   jwt:
     access_secret_key: 
@@ -169,128 +174,150 @@
 <div markdown="1">
  
 ```bash
-├── main
-│   ├── java
-│   │   └── org
-│   │       └── example
-│   │           └── pongguel
-│   │               ├── PongguelApplication.java
-│   │               ├── book
-│   │               │   ├── controller
-│   │               │   │   ├── BookController.java
-│   │               │   │   ├── BookLikeController.java
-│   │               │   │   ├── BookSaveController.java
-│   │               │   │   └── BookShareController.java
-│   │               │   ├── domain
-│   │               │   │   └── Book.java
-│   │               │   ├── dto
-│   │               │   │   ├── BookDetailWithNoteListResponse.java
-│   │               │   │   ├── DeleteSavedBookResponse.java
-│   │               │   │   ├── LikeBookResponse.java
-│   │               │   │   ├── LikedBookListResponse.java
-│   │               │   │   ├── SaveSelectedBookResponse.java
-│   │               │   │   ├── SavedBookListResponse.java
-│   │               │   │   ├── SearchBookList.java
-│   │               │   │   ├── SearchBookRequest.java
-│   │               │   │   ├── SearchBookResponse.java
-│   │               │   │   ├── SelectedBook.java
-│   │               │   │   ├── ShareBookResponse.java
-│   │               │   │   └── SharedBookDetailWithNoteListResponse.java
-│   │               │   ├── repository
-│   │               │   │   └── BookRepository.java
-│   │               │   └── service
-│   │               │       ├── BookService.java
-│   │               │       ├── LikedBookService.java
-│   │               │       ├── SavedBookService.java
-│   │               │       └── ShareSavedBookService.java
-│   │               ├── config
-│   │               │   ├── ApiConfig.java
-│   │               │   ├── RedisConfig.java
-│   │               │   ├── SecurityConfig.java
-│   │               │   └── SwaggerConfig.java
-│   │               ├── exception
-│   │               │   ├── BadRequestException.java
-│   │               │   ├── BaseException.java
-│   │               │   ├── ConflictException.java
-│   │               │   ├── ErrorCode.java
-│   │               │   ├── ErrorResponse.java
-│   │               │   ├── ForbiddenException.java
-│   │               │   ├── InternalServerException.java
-│   │               │   ├── NotFoundException.java
-│   │               │   ├── UnauthorizedException.java
-│   │               │   └── handler
-│   │               │       └── GlobalExceptionHandler.java
-│   │               ├── jwt
-│   │               │   ├── JwtAuthenticationFilter.java
-│   │               │   ├── JwtTokenProvider.java
-│   │               │   ├── JwtUtil.java
-│   │               │   ├── controller
-│   │               │   │   └── JwtController.java
-│   │               │   ├── domain
-│   │               │   │   └── CustomUserDetails.java
-│   │               │   ├── dto
-│   │               │   │   ├── JwtTokenDto.java
-│   │               │   │   └── TokenRefreshRequest.java
-│   │               │   └── service
-│   │               │       ├── JwtService.java
-│   │               │       └── UserDetailService.java
-│   │               ├── main
-│   │               │   ├── controller
-│   │               │   │   └── MainController.java
-│   │               │   └── service
-│   │               ├── note
-│   │               │   ├── controller
-│   │               │   │   ├── NoteBookmarkController.java
-│   │               │   │   ├── NoteController.java
-│   │               │   │   └── NoteDetailController.java
-│   │               │   ├── domain
-│   │               │   │   └── Note.java
-│   │               │   ├── dto
-│   │               │   │   ├── BookmarkNoteResponse.java
-│   │               │   │   ├── BookmarkedNoteListResponse.java
-│   │               │   │   ├── NoteDeleteResponse.java
-│   │               │   │   ├── NoteDetailResponse.java
-│   │               │   │   ├── NoteListResponse.java
-│   │               │   │   └── NoteWriteRequest.java
-│   │               │   ├── repository
-│   │               │   │   └── NoteRepository.java
-│   │               │   └── service
-│   │               │       ├── NoteBookmarkService.java
-│   │               │       ├── NoteDeleteService.java
-│   │               │       ├── NoteDetailService.java
-│   │               │       └── NoteService.java
-│   │               ├── redis
-│   │               │   ├── RedisController.java
-│   │               │   ├── RedisParam.java
-│   │               │   ├── RedisRepository.java
-│   │               │   └── RedisService.java
-│   │               └── user
-│   │                   ├── controller
-│   │                   │   └── KakaoController.java
-│   │                   ├── domain
-│   │                   │   ├── Role.java
-│   │                   │   └── User.java
-│   │                   ├── dto
-│   │                   │   ├── KakaoUserInfo.java
-│   │                   │   ├── LoginResponse.java
-│   │                   │   ├── LoginResult.java
-│   │                   │   └── UserInfoResponse.java
-│   │                   ├── repository
-│   │                   │   └── UserRepository.java
-│   │                   └── service
-│   │                       ├── KakaoService.java
-│   │                       └── ValidateUser.java
-│   └── resources
-│       ├── application-secret.yml
-│       ├── application.yml
-│       ├── static
-│       └── templates
-└── test
-    └── java
-        └── org
-            └── example
-                └── pongguel
-                    └── PongguelApplicationTests.java
+    ├── main
+    │   ├── java
+    │   │   └── org
+    │   │       └── example
+    │   │           └── pongguel
+    │   │               ├── PongguelApplication.java
+    │   │               ├── book
+    │   │               │   ├── controller
+    │   │               │   │   ├── BookController.java
+    │   │               │   │   ├── BookLikeController.java
+    │   │               │   │   ├── BookSaveController.java
+    │   │               │   │   └── BookShareController.java
+    │   │               │   ├── domain
+    │   │               │   │   └── Book.java
+    │   │               │   ├── dto
+    │   │               │   │   ├── BookDetailWithNoteListResponse.java
+    │   │               │   │   ├── DeleteSavedBookResponse.java
+    │   │               │   │   ├── LikeBookResponse.java
+    │   │               │   │   ├── LikedBookListResponse.java
+    │   │               │   │   ├── SaveSelectedBookResponse.java
+    │   │               │   │   ├── SavedBookListResponse.java
+    │   │               │   │   ├── SearchBookList.java
+    │   │               │   │   ├── SearchBookRequest.java
+    │   │               │   │   ├── SearchBookResponse.java
+    │   │               │   │   ├── SelectedBook.java
+    │   │               │   │   ├── ShareBookResponse.java
+    │   │               │   │   └── SharedBookDetailWithNoteListResponse.java
+    │   │               │   ├── repository
+    │   │               │   │   └── BookRepository.java
+    │   │               │   └── service
+    │   │               │       ├── BookService.java
+    │   │               │       ├── LikedBookService.java
+    │   │               │       ├── SavedBookService.java
+    │   │               │       ├── ShareBookByKakaoTalkService.java
+    │   │               │       └── SharedBooksDetailService.java
+    │   │               ├── config
+    │   │               │   ├── ApiConfig.java
+    │   │               │   ├── RedisConfig.java
+    │   │               │   ├── SecurityConfig.java
+    │   │               │   └── SwaggerConfig.java
+    │   │               ├── exception
+    │   │               │   ├── BadRequestException.java
+    │   │               │   ├── BaseException.java
+    │   │               │   ├── ConflictException.java
+    │   │               │   ├── ErrorCode.java
+    │   │               │   ├── ErrorResponse.java
+    │   │               │   ├── ForbiddenException.java
+    │   │               │   ├── InternalServerException.java
+    │   │               │   ├── NotFoundException.java
+    │   │               │   ├── UnauthorizedException.java
+    │   │               │   └── handler
+    │   │               │       └── GlobalExceptionHandler.java
+    │   │               ├── feign
+    │   │               │   ├── client
+    │   │               │   │   └── SendKakaoTalkClient.java
+    │   │               │   ├── dto
+    │   │               │   │   ├── KakaoFriendsInfo.java
+    │   │               │   │   ├── KakaoTalkFriendsSendRequest.java
+    │   │               │   │   ├── KakaoTalkSendRequest.java
+    │   │               │   │   └── KakaoTalkSendResponse.java
+    │   │               │   └── service
+    │   │               │       └── KakaoTalkService.java
+    │   │               ├── jwt
+    │   │               │   ├── JwtAuthenticationFilter.java
+    │   │               │   ├── JwtTokenProvider.java
+    │   │               │   ├── JwtUtil.java
+    │   │               │   ├── controller
+    │   │               │   │   └── JwtController.java
+    │   │               │   ├── domain
+    │   │               │   │   └── CustomUserDetails.java
+    │   │               │   ├── dto
+    │   │               │   │   ├── JwtTokenDto.java
+    │   │               │   │   └── TokenRefreshRequest.java
+    │   │               │   └── service
+    │   │               │       ├── JwtService.java
+    │   │               │       └── UserDetailService.java
+    │   │               ├── main
+    │   │               │   ├── controller
+    │   │               │   │   └── MainController.java
+    │   │               │   └── service
+    │   │               ├── note
+    │   │               │   ├── controller
+    │   │               │   │   ├── NoteBookmarkController.java
+    │   │               │   │   ├── NoteController.java
+    │   │               │   │   └── NoteDetailController.java
+    │   │               │   ├── domain
+    │   │               │   │   └── Note.java
+    │   │               │   ├── dto
+    │   │               │   │   ├── BookmarkNoteResponse.java
+    │   │               │   │   ├── BookmarkedNoteListResponse.java
+    │   │               │   │   ├── NoteDeleteResponse.java
+    │   │               │   │   ├── NoteDetailResponse.java
+    │   │               │   │   ├── NoteListResponse.java
+    │   │               │   │   └── NoteWriteRequest.java
+    │   │               │   ├── repository
+    │   │               │   │   └── NoteRepository.java
+    │   │               │   └── service
+    │   │               │       ├── NoteBookmarkService.java
+    │   │               │       ├── NoteDeleteService.java
+    │   │               │       ├── NoteDetailService.java
+    │   │               │       └── NoteService.java
+    │   │               ├── redis
+    │   │               │   ├── RedisController.java
+    │   │               │   ├── RedisParam.java
+    │   │               │   ├── RedisRepository.java
+    │   │               │   └── RedisService.java
+    │   │               └── user
+    │   │                   ├── controller
+    │   │                   │   ├── KakaoReissueController.java
+    │   │                   │   ├── KakaoSignInController.java
+    │   │                   │   ├── KakaoSignOutController.java
+    │   │                   │   └── UserDetailController.java
+    │   │                   ├── domain
+    │   │                   │   ├── KakaoToken.java
+    │   │                   │   ├── Role.java
+    │   │                   │   └── User.java
+    │   │                   ├── dto
+    │   │                   │   ├── KakaoTokenInfo.java
+    │   │                   │   ├── KakaoUserInfoAndToken.java
+    │   │                   │   ├── KakaoUserInfoResponse.java
+    │   │                   │   ├── LoginResponse.java
+    │   │                   │   ├── LoginResult.java
+    │   │                   │   ├── PongUserInfo.java
+    │   │                   │   └── UnlinkedUserDto.java
+    │   │                   ├── repository
+    │   │                   │   ├── KakaoTokenRepository.java
+    │   │                   │   └── UserRepository.java
+    │   │                   └── service
+    │   │                       ├── KakaoSignInService.java
+    │   │                       ├── KakaoSignOutService.java
+    │   │                       ├── KakaoTokenReissueService.java
+    │   │                       ├── UserService.java
+    │   │                       └── ValidateUser.java
+    │   └── resources
+    │       ├── application-secret.yml
+    │       ├── application.yml
+    │       ├── static
+    │       └── templates
+    └── test
+        └── java
+            └── org
+                └── example
+                    └── pongguel
+                        └── PongguelApplicationTests.java
 ```
 </div>
 </details>
@@ -305,7 +332,11 @@
 
 ### 서비스 로그아웃
 * 카카오 서비스 전체 로그아웃
-* 로그아웃 시 Redis에 저장된 Refresh Token 삭제 
+* 로그아웃 시 Redis에 저장된 Refresh Token 삭제
+
+### 마이페잊
+* 사용자 마이페이지
+* 회원 탈퇴 시 모든 정보 삭제 및 카카오 연결 끊기
 
 ### 책 조회 및 저장 (Naver 책 검색 API)
 * 검색어는 자동으로 인코딩되어 전달
@@ -317,7 +348,7 @@
 * 저장된 책 `상세보기` 기능 (책의 정보와 작성된 노트리스트 함께 조회)
 * 저장된 책 `노트` 작성 기능
 * 저장된 책 `삭제` 기능, 책과 관련된 모든 노트도 함께 삭제
-* 저장된 책 `공유` 기능, 공유토큰 및 공유 URL 생성
+* 저장된 책 `공유` 기능, 공유토큰 및 공유 URL 생성 및 카카오톡 메시지 전송
 * `좋아요`, `노트` 전체 목록 조회
  
 ### 책 공유하기 (Kakao 메시지 API)
@@ -325,6 +356,12 @@
 * 공유URL을 포함해 카카오톡 메시지로 전달
 * 공유된 책의 URL은 스프링 시큐리티 예외
 * 공유된 책의 노트들도 함께 열람 가능
+  
+  <details>
+  <summary><strong> 카카오톡 메시지 보내기</strong></summary>
+    <div markdown="1">
+    <img src="https://github.com/user-attachments/assets/67d5fd0c-3ca7-4180-9237-2fa6f90133f2" width="80%" height="100%">
+  </details>
 
 ### 노트
 * 노트는 최신순으로 정렬
@@ -340,16 +377,19 @@
 ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=Swagger&logoColor=white)
 |No| Title           | Method  | Path                       | Authorization |
 |---|-----------------|:-------:|----------------------------|:-------------:|
-|1|카카오 인가코드|`GET`|`/api/kakao/login`|X|
+|1|카카오 인가코드|`GET`|`/api/kakao/sign-in`|X|
 |2|로그인 및 회원가입|`GET`|`/api/kakao/callback?code={카카오_인가코드}`|X|
-|3|로그아웃|`GET`|`/api/kakao/logout`|X|
-|4|책 검색|`GET`|`/api/kakao/logout`|X|
+|3|로그아웃|`GET`|`/api/kakao-logout/sign-out`|X|
+|3|마이페이지|`GET`|`/api/users/my-page`|O|
+|3|회원 탈퇴|`GET`|`/api/users/leave`|O|
+|4|책 검색|`GET`|`/api/books/search`|X|
 |5|책 저장|`POST`|`/api/books/save`|O|
 |6|내 서재 조회|`GET`|`/api/saved-books/list`|O|
 |7|서재 책 상세 조회|`GET`|`/api/saved-books:bookId/detail`|O|
 |8|서재 책 삭제|`DELETED`|`/api/saved-books/:bookId/deleted`|O|
 |9|서재 책 좋아요|`PATCH`|`/api/liked-books/:bookId/like`|O|
-|10|서재 책 공유하기|`POST`|`/api/saved-books/:bookId/share`|O|
+|10|서재 책 나에게 공유하기|`POST`|`/api/saved-books/:bookId/share`|O|
+|11|서재 책 친구에게 공유하기|`POST`|`/api/saved-books/:bookId/share-friends`|O|
 |11|외부인 책 상세 조회|`GET`|`/api/shared/books/:shareToken`|O|
 |12|외부인 책 노트 상세 조회|`GET`|`/api/shared/books/:shareToken/notes/:noteId`|O|
 |13|노트 생성|`POST`|`/api/notes/:bookId/write`|O|
@@ -405,6 +445,7 @@
 ## 문제 상황
 WebClient의 Naver 책 관련 baseUrl에 전체 URL("https://openapi.naver.com/v1/search")이 설정되어 있었지만, </br>
 실제 요청 시 이 baseUrl이 제대로 인식되지 않음
+
 ## 원인 분석
 - WebClient에서 baseUrl을 설정했음에도 불구하고, uri() 메소드를 사용할 때 완전한 URI를 구성하지 않으면 baseUrl이 무시 가능성 있음
 - 특히 UriBuilder를 사용할 때 이런 문제가 발생
@@ -429,6 +470,41 @@ WebClient의 Naver 책 관련 baseUrl에 전체 URL("https://openapi.naver.com/v
 </div>
 </details>
 </br>
+<details>
+<summary><strong>⚡ Feign JSON 직렬화 문제 및 파싱 오류</strong></summary>
+<div markdown="1">
+<p> 
+
+## 문제 상황
+책 공유하기를 진행하던 중 JSON 직렬화 문제가 발생했다.</br>
+더불어 친구에게 공유하기는 사용자 친구 목록에서 불러온 UUID가 reqeust에 파싱되지 않아 `Bad request`가 계속 발생했다.
+
+## 원인 분석
+- JSON 직렬화 문제: 기존에 사용하던 record 타입이 Kakao API의 요구사항과 맞지 않았다.
+- UUID 파싱 오류: 친구 목록의 UUID를 List 형태로 한 번에 전송하는 방식에 문제가 발생했다.
+- UUID NULL 인식 오류
+
+
+## 해결 과정
+1. JSON 직렬화 문제
+- 기존 record 타입을 Class 형식으로 다시 변경
+- kakao 요구에 맞도록 클래스 구조 수정
+- ObjectMapper를 활용해 json으로 직접 파싱해
+</br>
+2. UUID 파싱 오류
+- 친구 목록 UUID를 List로 한 번에 전송하는 대신, 개별적으로 받아 처리하는 방식으로 변경
+</br>
+3. UUID BAD REQUEST 문제
+  - ReqeustBody의 순서 문제
+    - 친구에게 전송하기 reqeust는 나에게 전송하기를 상속받아 진행했다.
+    - 이 과정에서 uuid 리스트와 contents가 서로 순서가 바뀌었다.
+    - feignClient에서는 각각 받지 않고 하나의 Map으로 묶어 응답 본문을 전송하고 있었다.
+    - 계속해서 uuid가 null로 입력돼서 결국 하나씩 분리해 param 형태로 전송했다.
+
+</p>
+</div>
+</details>
+
 <details>
 <summary><strong>⚡ JWT 토큰 유효기간 만료 오류</strong></summary>
 <div markdown="1">
@@ -546,18 +622,17 @@ JSON 인코딩 문제를 config 파일에 미리 설정해야 했다. 많은 블
 1. 클라이언트 없이 서버에서 공유 메시지 내용 고정
 2. 서버에서 고정 템플릿 사용 불가로 JSON 직접 파싱 필요
 3. 토큰 관리: 카카오 액세스 토큰 관리
-4. 친구 정보 활용: 카카오 API로 사용자 친구 정보 조회 및 저장
+4. 친구 정보 활용: 카카오 API로 사용자 친구 정보 조회
+   
+### 사용한 방법
+1. openFeign 방식을 활용하기로 했다!
+2. 물론 기존 webClient 방식으로도 가능했지만, 훨씬 코드가 간결해지고 client 작업을 대신 해주기에 백엔드의 부담이 덜었다.
+3. 카카오 토큰은 임시로 서버 db에 저장하는 방식을 택했다. -> 추후에 스케줄러를 돌려서 관리해줄 예정이다.
+4. 메시지는 고정으로 서버에서 작성하기로 했다. 카카오 메시지 템플릿을 사용해도 괜찮았지만 책 표지를 함께 보여주고 싶어서였다!
 
-그리고 공유하기 대신 메시지 전송하기 기능으로 진행하게 되어, 사용자의 친구 정보도 가져오기 API도 활용해야 했다. </br>
-서비스 자체적으로 jwt 토큰을 발급하기 때문에 카카오 accessToken을 저장하지 않았기에 전반적으로 큰 수정이 필요했다... </br>
-물론 클라이언트가 있었다면 쿠키로 저장해두면 좋았겠지만 없는 관계로 서버에 refreshToken을 저장하고 메시지를 공유할 때마다 액세스토큰을 재발급 받기로 했다. </br>
-액세스토큰으로 사용자 친구 정보를 가져와서 미리 저장해둔 메시지 형식으로 전송하도록 했다! </br>
-
-<이미지>
 #### 구현 결과
 - 로컬 환경에서 초기 테스트 성공
-- ngrok을 통한 포워딩으로 실제 환경 테스트 진행
-- 최종 배포 완료 및 기능 검증
+<img src="https://github.com/user-attachments/assets/67d5fd0c-3ca7-4180-9237-2fa6f90133f2" width="80%" height="100%">
 
 **메시지 전송 기능을 통해 다양한 기술적 도전을 극복하며 실용적인 기능을 성공적으로 구현하게 되었다!**
 
