@@ -22,6 +22,8 @@ public class Book {
     @Column(nullable = false)
     private String bookTitle;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
     private String imageUrl;
 
