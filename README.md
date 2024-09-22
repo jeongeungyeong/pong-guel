@@ -380,7 +380,7 @@
 |1|카카오 인가코드|`GET`|`/api/kakao/sign-in`|X|
 |2|로그인 및 회원가입|`GET`|`/api/kakao/callback?code={카카오_인가코드}`|X|
 |3|로그아웃|`GET`|`/api/kakao-logout/sign-out`|X|
-|4|마이페이지|`GET`|`/api/users/my-page`|O|
+|4|마이페이지|`GET`|`/api/users/my-page`|O|
 |5|회원 탈퇴|`GET`|`/api/users/leave`|O|
 |6|책 검색|`GET`|`/api/books/search`|X|
 |7|책 저장|`POST`|`/api/books/save`|O|
@@ -390,8 +390,8 @@
 |11|서재 책 좋아요|`PATCH`|`/api/liked-books/:bookId/like`|O|
 |12|서재 책 나에게 공유하기|`POST`|`/api/saved-books/:bookId/share`|O|
 |13|서재 책 친구에게 공유하기|`POST`|`/api/saved-books/:bookId/share-friends`|O|
-|14|외부인 책 상세 조회|`GET`|`/api/shared/books/:shareToken`|O|
-|15|외부인 책 노트 상세 조회|`GET`|`/api/shared/books/:shareToken/notes/:noteId`|O|
+|14|외부인 책 상세 조회|`GET`|`/api/shared/books/:shareToken`|X|
+|15|외부인 책 노트 상세 조회|`GET`|`/api/shared/books/:shareToken/notes/:noteId`|X|
 |16|노트 생성|`POST`|`/api/notes/:bookId/write`|O|
 |17|노트 상세 조회|`GET`|`/api/notes-detail/:noteId/read`|O|
 |18|노트 수정|`PATCH`|`/api/notes-detail/:noteId/update`|O|
