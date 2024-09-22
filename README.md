@@ -436,7 +436,7 @@
 </p>
 </div>
 </details>
-</br>
+
 <details>
 <summary><strong>⚡ WebClient 네이버 책 검색 baseUrl 인식 문제</strong></summary>
 <div markdown="1">
@@ -469,7 +469,7 @@ WebClient의 Naver 책 관련 baseUrl에 전체 URL("https://openapi.naver.com/v
 </p>
 </div>
 </details>
-</br>
+
 <details>
 <summary><strong>⚡ Feign JSON 직렬화 문제 및 파싱 오류</strong></summary>
 <div markdown="1">
@@ -486,20 +486,26 @@ WebClient의 Naver 책 관련 baseUrl에 전체 URL("https://openapi.naver.com/v
 
 
 ## 해결 과정
+
 1. JSON 직렬화 문제
+   
 - 기존 record 타입을 Class 형식으로 다시 변경
 - kakao 요구에 맞도록 클래스 구조 수정
 - ObjectMapper를 활용해 json으로 직접 파싱해
-</br>
+
+
 2. UUID 파싱 오류
+   
 - 친구 목록 UUID를 List로 한 번에 전송하는 대신, 개별적으로 받아 처리하는 방식으로 변경
-</br>
+
+
 3. UUID BAD REQUEST 문제
-  - ReqeustBody의 순서 문제
-    - 친구에게 전송하기 reqeust는 나에게 전송하기를 상속받아 진행했다.
-    - 이 과정에서 uuid 리스트와 contents가 서로 순서가 바뀌었다.
-    - feignClient에서는 각각 받지 않고 하나의 Map으로 묶어 응답 본문을 전송하고 있었다.
-    - 계속해서 uuid가 null로 입력돼서 결국 하나씩 분리해 param 형태로 전송했다.
+   
+- ReqeustBody의 순서 문제
+  - 친구에게 전송하기 reqeust는 나에게 전송하기를 상속받아 진행했다.
+  - 이 과정에서 uuid 리스트와 contents가 서로 순서가 바뀌었다.
+  - feignClient에서는 각각 받지 않고 하나의 Map으로 묶어 응답 본문을 전송하고 있었다.
+  - 계속해서 uuid가 null로 입력돼서 결국 하나씩 분리해 param 형태로 전송했다.
 
 </p>
 </div>
