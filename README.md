@@ -380,27 +380,27 @@
 |1|카카오 인가코드|`GET`|`/api/kakao/sign-in`|X|
 |2|로그인 및 회원가입|`GET`|`/api/kakao/callback?code={카카오_인가코드}`|X|
 |3|로그아웃|`GET`|`/api/kakao-logout/sign-out`|X|
-|3|마이페이지|`GET`|`/api/users/my-page`|O|
-|3|회원 탈퇴|`GET`|`/api/users/leave`|O|
-|4|책 검색|`GET`|`/api/books/search`|X|
-|5|책 저장|`POST`|`/api/books/save`|O|
-|6|내 서재 조회|`GET`|`/api/saved-books/list`|O|
-|7|서재 책 상세 조회|`GET`|`/api/saved-books:bookId/detail`|O|
-|8|서재 책 삭제|`DELETED`|`/api/saved-books/:bookId/deleted`|O|
-|9|서재 책 좋아요|`PATCH`|`/api/liked-books/:bookId/like`|O|
-|10|서재 책 나에게 공유하기|`POST`|`/api/saved-books/:bookId/share`|O|
-|11|서재 책 친구에게 공유하기|`POST`|`/api/saved-books/:bookId/share-friends`|O|
-|11|외부인 책 상세 조회|`GET`|`/api/shared/books/:shareToken`|O|
-|12|외부인 책 노트 상세 조회|`GET`|`/api/shared/books/:shareToken/notes/:noteId`|O|
-|13|노트 생성|`POST`|`/api/notes/:bookId/write`|O|
-|14|노트 상세 조회|`GET`|`/api/notes-detail/:noteId/read`|O|
-|15|노트 수정|`PATCH`|`/api/notes-detail/:noteId/update`|O|
-|16|노트 보관함 이동|`PATCH`|`/api/notes-detail/:noteId/soft-delete`|O|
-|17|노트 삭제|`DELETED`|`/api/notes-detail/:noteId/final-delete`|O|
-|18|노트 즐겨찾기|`PATCH`|`/api/notes-detail/{noteId}/read`|O|
-|19|노트 즐겨찾기 목록 조회|`GET`|`/api/bookmarked-notes/list`|O|
-|20|노트 활성화 목록 조회|`GET`|`/api/notes/active-list`|O|
-|21|노트 휴지통 목록 조회|`GET`|`/api/notes/active-list`|O|
+|4|마이페이지|`GET`|`/api/users/my-page`|O|
+|5|회원 탈퇴|`GET`|`/api/users/leave`|O|
+|6|책 검색|`GET`|`/api/books/search`|X|
+|7|책 저장|`POST`|`/api/books/save`|O|
+|8|내 서재 조회|`GET`|`/api/saved-books/list`|O|
+|9|서재 책 상세 조회|`GET`|`/api/saved-books:bookId/detail`|O|
+|10|서재 책 삭제|`DELETED`|`/api/saved-books/:bookId/deleted`|O|
+|11|서재 책 좋아요|`PATCH`|`/api/liked-books/:bookId/like`|O|
+|12|서재 책 나에게 공유하기|`POST`|`/api/saved-books/:bookId/share`|O|
+|13|서재 책 친구에게 공유하기|`POST`|`/api/saved-books/:bookId/share-friends`|O|
+|14|외부인 책 상세 조회|`GET`|`/api/shared/books/:shareToken`|O|
+|15|외부인 책 노트 상세 조회|`GET`|`/api/shared/books/:shareToken/notes/:noteId`|O|
+|16|노트 생성|`POST`|`/api/notes/:bookId/write`|O|
+|17|노트 상세 조회|`GET`|`/api/notes-detail/:noteId/read`|O|
+|18|노트 수정|`PATCH`|`/api/notes-detail/:noteId/update`|O|
+|19|노트 보관함 이동|`PATCH`|`/api/notes-detail/:noteId/soft-delete`|O|
+|20|노트 삭제|`DELETED`|`/api/notes-detail/:noteId/final-delete`|O|
+|21|노트 즐겨찾기|`PATCH`|`/api/notes-detail/{noteId}/read`|O|
+|22|노트 즐겨찾기 목록 조회|`GET`|`/api/bookmarked-notes/list`|O|
+|23|노트 활성화 목록 조회|`GET`|`/api/notes/active-list`|O|
+|24|노트 휴지통 목록 조회|`GET`|`/api/notes/active-list`|O|
 
 </br>
 
