@@ -13,6 +13,12 @@ java {
     }
 }
 
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2023.0.2"
+    }
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -41,6 +47,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     // org.json
     implementation 'org.json:json:20240303'
+    // openFeign 설정
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'

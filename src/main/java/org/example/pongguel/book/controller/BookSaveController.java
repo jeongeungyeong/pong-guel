@@ -9,7 +9,7 @@ import org.example.pongguel.book.dto.DeleteSavedBookResponse;
 import org.example.pongguel.book.dto.SavedBookListResponse;
 import org.example.pongguel.book.dto.ShareBookResponse;
 import org.example.pongguel.book.service.SavedBookService;
-import org.example.pongguel.book.service.ShareSavedBookService;
+import org.example.pongguel.book.service.ShareBookByKakaoTalkService;
 import org.example.pongguel.exception.ErrorCode;
 import org.example.pongguel.exception.UnauthorizedException;
 import org.example.pongguel.jwt.JwtUtil;
@@ -25,7 +25,7 @@ import java.util.List;
 @Tag(name="Book_SAVE",description = "사용자가 저장한 책 서비스 관련된 Api입니다.")
 public class BookSaveController {
     private final SavedBookService savedBookService;
-    private final ShareSavedBookService shareSavedBookService;
+    private final ShareBookByKakaoTalkService shareBookByKakaoTalkService;
     private final JwtUtil jwtUtil;
 
     // 노트 목록까지 보기
@@ -62,14 +62,26 @@ public class BookSaveController {
         return ResponseEntity.status(HttpStatus.OK).body(deleteSavedBookResponse);
     }
     @PostMapping("/{bookId}/share")
-    @Operation(summary = "사용자가 저장한 책을 외부로 공유합니다.", description = "사용자가 저장한 책을 외부로 공유합니다. 공유토큰도 함께 생성됩니다.")
-    public ResponseEntity<ShareBookResponse> shareBook(HttpServletRequest request,
+    @Operation(summary = "사용자가 저장한 책을 카카오톡 나에게로 공유합니다.", description = "사용자가 저장한 책을 외부로 공유합니다. 공유토큰도 함께 생성됩니다.")
+    public ResponseEntity<ShareBookResponse> sharBook(HttpServletRequest request,
                                                        @PathVariable Long bookId){
         String token = jwtUtil.extractTokenFromRequest(request);
         if (token == null) {
             throw new UnauthorizedException(ErrorCode.JWT_INVALID_TOKEN);
         }
-        ShareBookResponse shareBookResponse = shareSavedBookService.shareBook(token,bookId);
+        ShareBookResponse shareBookResponse = shareBookByKakaoTalkService.shareBook(token,bookId,false);
+        return ResponseEntity.status(HttpStatus.CREATED).body(shareBookResponse);
+    }
+
+    @PostMapping("/{bookId}/share-friends")
+    @Operation(summary = "사용자가 저장한 책을 카카오톡 친구에게 공유합니다.", description = "사용자가 저장한 책을 외부로 공유합니다. 공유토큰도 함께 생성됩니다.")
+    public ResponseEntity<ShareBookResponse> shareToFriendsBook(HttpServletRequest request,
+                                                       @PathVariable Long bookId){
+        String token = jwtUtil.extractTokenFromRequest(request);
+        if (token == null) {
+            throw new UnauthorizedException(ErrorCode.JWT_INVALID_TOKEN);
+        }
+        ShareBookResponse shareBookResponse = shareBookByKakaoTalkService.shareBook(token,bookId,true);
         return ResponseEntity.status(HttpStatus.CREATED).body(shareBookResponse);
     }
 }
