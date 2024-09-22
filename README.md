@@ -164,7 +164,7 @@
 <summary><strong>ERD</strong></summary>
 <div markdown="1">
  
-<img src="https://github.com/user-attachments/assets/d68477d9-2edf-4e8a-830e-a3a669fd39d7" >
+<img src="https://github.com/user-attachments/assets/bdcc89d8-592c-4240-a74f-f8037b27b2ab" width="90%" height="100%" >
 
 </div>
 </details>
@@ -334,7 +334,7 @@
 * 카카오 서비스 전체 로그아웃
 * 로그아웃 시 Redis에 저장된 Refresh Token 삭제
 
-### 마이페잊
+### 마이페이지
 * 사용자 마이페이지
 * 회원 탈퇴 시 모든 정보 삭제 및 카카오 연결 끊기
 
