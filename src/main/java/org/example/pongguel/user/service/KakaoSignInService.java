@@ -36,10 +36,6 @@ public class KakaoSignInService {
     private String clientId;
     @Value("${kakao.redirect_url}")
     private String redirectUrl;
-    @Value("${kakao.logout_redirect_url}")
-    private String logoutRedirectUrl;
-    @Value("${kakao.user_base_url}")
-    private String userBaseUrl;
     @Value("${kakao.kauth_base_url}")
     private String kauthBaseUrl;
     @Value("${kakao.user_info_url}")
@@ -63,16 +59,16 @@ public class KakaoSignInService {
         // 2. 액세스 토큰으로 사용자 정보 가져오기
         KakaoUserInfoAndToken kakaoUserInfoAndToken = getKakaoUserInfo(kakaoTokenInfo);
         // 3. 회원가입 및 로그인 진행하기
-        UserInfoResponse userInfoResponse = processKakaoUser(kakaoUserInfoAndToken);
+        KakaoUserInfoResponse kakaoUserInfoResponse = processKakaoUser(kakaoUserInfoAndToken);
         // 4. 카카오 사용자 조회 및 회원가입
-        HttpStatus status = userInfoResponse.isNewUser() ? HttpStatus.CREATED : HttpStatus.OK;
-        String message = userInfoResponse.isNewUser() ? "회원가입 및 카카오 로그인에 성공했습니다!" : "카카오 로그인에 성공했습니다.";
+        HttpStatus status = kakaoUserInfoResponse.isNewUser() ? HttpStatus.CREATED : HttpStatus.OK;
+        String message = kakaoUserInfoResponse.isNewUser() ? "회원가입 및 카카오 로그인에 성공했습니다!" : "카카오 로그인에 성공했습니다.";
         // jwt 토큰 발급
-        String jwtAccessToken = jwtTokenProvider.createAccessToken(userInfoResponse.accountEmail());
-        String jwtRefreshToken = jwtTokenProvider.createRefreshToken(userInfoResponse.accountEmail());
+        String jwtAccessToken = jwtTokenProvider.createAccessToken(kakaoUserInfoResponse.accountEmail());
+        String jwtRefreshToken = jwtTokenProvider.createRefreshToken(kakaoUserInfoResponse.accountEmail());
         JwtTokenDto jwtTokenDto = new JwtTokenDto(jwtAccessToken, jwtRefreshToken);
         // LoginResult 객체 생성 및 반환
-        return new LoginResult(status,new LoginResponse(message,userInfoResponse,jwtTokenDto));
+        return new LoginResult(status,new LoginResponse(message, kakaoUserInfoResponse,jwtTokenDto));
     }
 
     // 카카오 accessToken 발급
@@ -120,9 +116,9 @@ public class KakaoSignInService {
                 .doOnNext(jsonNode -> log.info("카카오 응답: {}", jsonNode.toString()))  // 응답 로깅 추가
                 .map(jsonNode -> {
                     Long id = jsonNode.path("id").asLong();
-                    String email = jsonNode.path("kakao_account").path("profile").path("email").asText();
-                    String nickname = jsonNode.path("properties").path("nickname").asText();
-                    String thumbnail_image_url = jsonNode.path("properties").path("thumbnail_image_url").asText();
+                    String email = jsonNode.path("kakao_account").path("email").asText();
+                    String nickname = jsonNode.path("kakao_account").path("profile").path("nickname").asText();
+                    String thumbnail_image_url = jsonNode.path("kakao_account").path("profile").path("thumbnail_image_url").asText();
                     return new KakaoUserInfoAndToken(id, email, nickname, thumbnail_image_url, kakaoTokenInfo);
                 })
                 .onErrorMap(WebClientResponseException.class, e -> {
@@ -143,43 +139,52 @@ public class KakaoSignInService {
     }
 
     // 카카오 로그인 진행 및 토큰 저장
-    private UserInfoResponse processKakaoUser(KakaoUserInfoAndToken kakaoUserInfoAndToken){
-        // 신규회원 유무 확인
-        boolean isNewUser = !userRepository.existsByAccountEmail(kakaoUserInfoAndToken.email());
-        User user = userRepository.findByAccountEmail(kakaoUserInfoAndToken.email())
-                .orElseGet(()->{
-                    // 회원정보가 없다면 회원가입 진행
-                    User newUser = User.builder()
-                            .kakaoId(kakaoUserInfoAndToken.id())
-                            .accountEmail(kakaoUserInfoAndToken.email())
-                            .nickname(kakaoUserInfoAndToken.nickname())
-                            .profileImage(kakaoUserInfoAndToken.thumbnail_image_url())
-                            .role(Role.ROLE_USER)
-                            .build();
-                    // 카카오 토큰 저장
-                    KakaoToken kakaoToken = KakaoToken.builder()
-                            .kakaoAccessToken(kakaoUserInfoAndToken.kakaoTokenInfo().kakaoAccessToken())
-                            .kakaoRefreshToken(kakaoUserInfoAndToken.kakaoTokenInfo().kakaoRefreshToken())
-                            .kakaoAccessTokenExpiresIn(kakaoUserInfoAndToken.kakaoTokenInfo().kakaoAccessTokenExpiresIn())
-                            .kakaoRefreshTokenExpiresIn(kakaoUserInfoAndToken.kakaoTokenInfo().kakaoRefreshTokenExpiresIn())
-                            .kakaoCreatedAt(LocalDateTime.now())
-                            .user(newUser)
-                            .build();
-                    kakaoTokenRepository.save(kakaoToken);
-                    return userRepository.save(newUser);
-                });
-        // 액세스 토큰 업데이트
-        KakaoToken kakaoToken = kakaoTokenRepository.findByUser_userId(user.getUserId())
-                .orElseThrow(()-> new BadRequestException(ErrorCode.USER_NOT_FOUND));
-        kakaoToken.updateKakaoToken(kakaoUserInfoAndToken.kakaoTokenInfo().kakaoAccessToken(),
-                kakaoUserInfoAndToken.kakaoTokenInfo().kakaoAccessTokenExpiresIn(),
-                kakaoUserInfoAndToken.kakaoTokenInfo().kakaoRefreshToken(),
-                kakaoUserInfoAndToken.kakaoTokenInfo().kakaoRefreshTokenExpiresIn(),
-                LocalDateTime.now(),
-                false);
-        // 변한 카카오 액세스 토큰 저장
-        kakaoTokenRepository.save(kakaoToken);
-        return new UserInfoResponse(user.getAccountEmail(), user.getNickname(),
-                user.getProfileImage(),user.getRole(),isNewUser);
+    private KakaoUserInfoResponse processKakaoUser(KakaoUserInfoAndToken kakaoUserInfoAndToken) {
+        {
+            User user = userRepository.findByAccountEmail(kakaoUserInfoAndToken.email())
+                    .orElseGet(() -> {
+                        // 신규 사용자 생성 로직
+                        User newUser = User.builder()
+                                .kakaoId(kakaoUserInfoAndToken.id())
+                                .accountEmail(kakaoUserInfoAndToken.email())
+                                .nickname(kakaoUserInfoAndToken.nickname())
+                                .profileImage(kakaoUserInfoAndToken.thumbnail_image_url())
+                                .role(Role.ROLE_USER)
+                                .build();
+                        return userRepository.save(newUser);
+                    });
+
+            // 카카오 토큰 업데이트 또는 생성
+            KakaoToken kakaoToken = kakaoTokenRepository.findByUser_userId(user.getUserId())
+                    .map(token -> {
+                        // 기존 토큰 업데이트
+                        token.updateKakaoToken(
+                                kakaoUserInfoAndToken.kakaoTokenInfo().kakaoAccessToken(),
+                                kakaoUserInfoAndToken.kakaoTokenInfo().kakaoAccessTokenExpiresIn(),
+                                kakaoUserInfoAndToken.kakaoTokenInfo().kakaoRefreshToken(),
+                                kakaoUserInfoAndToken.kakaoTokenInfo().kakaoRefreshTokenExpiresIn(),
+                                LocalDateTime.now(),
+                                false
+                        );
+                        return token;
+                    })
+                    .orElseGet(() -> {
+                        // 새 토큰 생성
+                        KakaoToken newToken = KakaoToken.builder()
+                                .kakaoAccessToken(kakaoUserInfoAndToken.kakaoTokenInfo().kakaoAccessToken())
+                                .kakaoRefreshToken(kakaoUserInfoAndToken.kakaoTokenInfo().kakaoRefreshToken())
+                                .kakaoAccessTokenExpiresIn(kakaoUserInfoAndToken.kakaoTokenInfo().kakaoAccessTokenExpiresIn())
+                                .kakaoRefreshTokenExpiresIn(kakaoUserInfoAndToken.kakaoTokenInfo().kakaoRefreshTokenExpiresIn())
+                                .kakaoCreatedAt(LocalDateTime.now())
+                                .user(user)
+                                .build();
+                        return kakaoTokenRepository.save(newToken);
+                    });
+
+            boolean isNewUser = kakaoToken.getKakaoCreatedAt().equals(LocalDateTime.now());
+
+            return new KakaoUserInfoResponse(user.getAccountEmail(), user.getNickname(),
+                    user.getProfileImage(), user.getRole(), isNewUser);
+        }
     }
 }
