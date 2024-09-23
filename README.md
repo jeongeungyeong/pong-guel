@@ -390,8 +390,8 @@
 |11|서재 책 좋아요|`PATCH`|`/api/liked-books/:bookId/like`|O|
 |12|서재 책 나에게 공유하기|`POST`|`/api/saved-books/:bookId/share`|O|
 |13|서재 책 친구에게 공유하기|`POST`|`/api/saved-books/:bookId/share-friends`|O|
-|14|외부인 책 상세 조회|`GET`|`/api/shared/books/:shareToken`|X|
-|15|외부인 책 노트 상세 조회|`GET`|`/api/shared/books/:shareToken/notes/:noteId`|X|
+|14|외부인 책 상세 조회|`GET`|`/api/shared/books/:shareToken`|O|
+|15|외부인 책 노트 상세 조회|`GET`|`/api/shared/books/:shareToken/notes/:noteId`|O|
 |16|노트 생성|`POST`|`/api/notes/:bookId/write`|O|
 |17|노트 상세 조회|`GET`|`/api/notes-detail/:noteId/read`|O|
 |18|노트 수정|`PATCH`|`/api/notes-detail/:noteId/update`|O|
