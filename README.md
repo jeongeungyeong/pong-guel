@@ -663,7 +663,7 @@ JSON 인코딩 문제를 config 파일에 미리 설정해야 했다. 많은 블
 </p>
 </div>
 </details>
-
+</br>
 ## ✉ Git Commit Message Convention
 
 <details>
