@@ -77,6 +77,7 @@
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=MySQL&logoColor=white)
 ![Redis](https://img.shields.io/badge/Redis-FF4438?style=flat&logo=Redis&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=Docker&logoColor=white)
+![Figma](https://img.shields.io/badge/Figma-%23F24E1E?style=flat&logo=Figma&logoColor=white)
 
 
 
@@ -656,7 +657,8 @@ JSON 인코딩 문제를 config 파일에 미리 설정해야 했다. 많은 블
 더불어 정보가 등록되어 있을 경우 해당 내역들까지 넘길 필요가 있을까? 라는 생각이 들면서 고민을 하게 되었다.</br>
 이전 프로젝트를 할 때 프론트도 같이 만들어봤던 경험을 바탕으로 피그마를 활용해 간단하게 UI를 구상했다. </br>
 
-</br>
+<img width="575" alt="스크린샷 2024-10-03 오후 5 10 55" src="https://github.com/user-attachments/assets/99ba7505-70a8-45bb-a0c1-c39d38e27bab">
+
 
 이전 개인 프로젝트 할 때 프론트도 같이 만들어봤던 경험 때문에 프론트를 먼저 생각해보고</br>
 로직을 생각하는 순서로 바뀐 계기가 되었다. 이렇게 생각하게 되니까 이해하기도 쉽고 로직이 머릿속에 그려졌다.</br>
